@@ -1,8 +1,13 @@
-# Meetup Manager AI - Database Schema
+# PredictifyLabs - Database Schema
 
 ## Descripción General
 
 Base de datos PostgreSQL diseñada para un sistema de gestión de meetups y eventos con capacidades de inteligencia artificial para predicciones de asistencia y generación de contenido.
+
+[Script SQL para crear la base de datos](https://drive.google.com/file/d/11NldP1wAa1Ba7Q_S4yEZyy6pmqEj-pgO/view?usp=sharing)
+
+
+[Diagrama Entidad-Relación](https://drive.google.com/file/d/1h2wEUBdC4fqWASFXthrFmloprC1us2YZ/view?usp=sharing)
 
 ## Arquitectura de Datos
 

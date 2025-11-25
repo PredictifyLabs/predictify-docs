@@ -10,13 +10,14 @@ Repositorio dedicado a la documentación oficial del proyecto.
 - Guia de despligue
 
 ## Estructura sugerida
-
+```
 docs/
 ├── database.md
 ├── architecture.md
 ├── backend.md
 ├── frontend.md
 └── ai-module.md
+```
 
 ### Descripción de archivos
 
