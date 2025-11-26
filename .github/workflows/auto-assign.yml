@@ -1,0 +1,35 @@
+name: Auto Assign Reviewers
+
+on:
+  pull_request:
+    types: [opened, ready_for_review]
+
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Auto assign reviewers
+        uses: wow-actions/auto-assign@v2
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          reviewers: |
+            jesuviloria
+            agutierrezreginodev
+
+          # Opciones necesarias
+          addReviewers: true
+          addAssignees: author
+          numberOfReviewers: 0
+          numberOfAssignees: 0
+          skipDraft: false
+
+      - name: Add note when PR becomes Ready for Review
+        if: github.event.action == 'ready_for_review'
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            🚀 Pull request is now ready for review!
