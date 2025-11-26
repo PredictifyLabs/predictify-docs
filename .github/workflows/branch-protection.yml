@@ -1,4 +1,4 @@
-name: Prevent Direct Push to Protected Branches
+name: Protect Master & Develop Branches
 
 on:
   push:
@@ -7,18 +7,31 @@ on:
       - develop
 
 jobs:
-  block-direct-push:
+  protect-branches:
     runs-on: ubuntu-latest
     steps:
-      - name: Detect direct push
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2   # Para leer correctamente el último commit
+
+      - name: Prevent direct pushes to protected branches
         run: |
+          echo "🔍 Checking push event..."
+
           echo "Ref: $GITHUB_REF"
           echo "Event: $GITHUB_EVENT_NAME"
 
-          # Si el push NO viene desde un Pull Request → bloquear
-          if [[ "$GITHUB_EVENT_NAME" != "pull_request" && "$GITHUB_EVENT_NAME" != "pull_request_target" ]]; then
-            echo "❌ Direct push detected on $GITHUB_REF. Only PR merges are allowed."
+          # Obtener mensaje del último commit
+          LAST_COMMIT_MSG="$(git log -1 --pretty=%B)"
+          echo "Last commit message:"
+          echo "$LAST_COMMIT_MSG"
+
+          # Validar si el commit viene de un PR (todos los merges de PR tienen (#ID))
+          if [[ "$LAST_COMMIT_MSG" != *"#"* ]]; then
+            echo "❌ Direct push detected on $GITHUB_REF."
+            echo "This branch ONLY accepts merges via Pull Request."
             exit 1
           fi
 
-          echo "✔ Protected branch policy satisfied. Merge from PR detected."
+          echo "✔ Protected branch policy satisfied. Detected merge from PR."
