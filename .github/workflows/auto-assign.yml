@@ -9,12 +9,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Assign reviewers
-        uses: wow-actions/auto-assign@v2.0.0
+      - name: Auto assign reviewers
+        uses: wow-actions/auto-assign@v2
         with:
-          reviewers: jesuviloria, agutierrezreginodev
-          skip_review_if_draft: false
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+          # Reviewers (puedes agregar más)
+          reviewers: |
+            jesuviloria
+            agutierrezreginodev
+
+          # Habilitar reales reviewers
+          addReviewers: true
+
+          # Asignar automáticamente el autor como assignee
+          addAssignees: author
+
+          # No limitar cantidad (0 = usar todos los reviewers)
+          numberOfReviewers: 0
+          numberOfAssignees: 0
+
+          # Skip si el PR es draft
+          skipDraft: false   # <-- equivalente correcto
+            
       - name: Add note when PR becomes Ready for Review
         if: github.event.action == 'ready_for_review'
         uses: peter-evans/create-or-update-comment@v3
@@ -22,4 +39,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            🚀 Thanks! This PR is now ready for review.
+            🚀 El pull request ahora está listo para revisión. ¡Gracias!
