@@ -11,7 +11,7 @@ jobs:
       - name: Assign reviewers
         uses: wow-actions/auto-assign@v2.0.0
         with:
-          reviewers: jesuviloria
+          reviewers: jesuviloria, agutierrezreginodev
           skip_review_if_draft: false
 
       - name: Add note when PR becomes Ready for Review
