@@ -24,3 +24,5 @@ jobs:
           fi
 
           echo "✔ Protected branch policy satisfied."
+
+
