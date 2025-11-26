@@ -7,17 +7,29 @@ on:
 jobs:
   assign:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Assign reviewers
-        uses: wow-actions/auto-assign@v2.0.0
+      - name: Auto assign reviewers
+        uses: wow-actions/auto-assign@v2
         with:
-          reviewers: jesuviloria
-          skip_review_if_draft: false
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          reviewers: |
+            jesuviloria
+            agutierrezreginodev
+
+          # Opciones necesarias
+          addReviewers: true
+          addAssignees: author
+          numberOfReviewers: 0
+          numberOfAssignees: 0
+          skipDraft: false
 
       - name: Add note when PR becomes Ready for Review
         if: github.event.action == 'ready_for_review'
-        uses: actions-ecosystem/action-add-comment@v1
+        uses: peter-evans/create-or-update-comment@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          comment: |
-            🚀 Thanks! This PR is now ready for review.
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            🚀 Pull request is now ready for review!
