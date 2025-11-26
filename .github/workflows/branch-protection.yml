@@ -1,4 +1,4 @@
-name: Enforce PR Rules on Protected Branches
+name: Prevent Direct Push to Protected Branches
 
 on:
   push:
@@ -7,22 +7,18 @@ on:
       - develop
 
 jobs:
-  enforce:
+  block-direct-push:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Block direct pushes
+      - name: Detect direct push
         run: |
-          if [[ "${GITHUB_REF}" == "refs/heads/master" || "${GITHUB_REF}" == "refs/heads/develop" ]]; then
+          echo "Ref: $GITHUB_REF"
+          echo "Event: $GITHUB_EVENT_NAME"
 
-            # 1. Si es push directo → bloquear
-            if [[ "${{ github.event.head_commit.message }}" != *"Merge pull request"* ]]; then
-              echo "❌ Direct push detected. This branch only accepts merges via PR."
-              exit 1
-            fi
-
+          # Si el push NO viene desde un Pull Request → bloquear
+          if [[ "$GITHUB_EVENT_NAME" != "pull_request" && "$GITHUB_EVENT_NAME" != "pull_request_target" ]]; then
+            echo "❌ Direct push detected on $GITHUB_REF. Only PR merges are allowed."
+            exit 1
           fi
 
-          echo "✔ Protected branch policy satisfied."
-
-
+          echo "✔ Protected branch policy satisfied. Merge from PR detected."
