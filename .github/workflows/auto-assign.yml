@@ -14,24 +14,17 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-          # Reviewers (puedes agregar más)
           reviewers: |
             jesuviloria
             agutierrezreginodev
 
-          # Habilitar reales reviewers
+          # Opciones necesarias
           addReviewers: true
-
-          # Asignar automáticamente el autor como assignee
           addAssignees: author
-
-          # No limitar cantidad (0 = usar todos los reviewers)
           numberOfReviewers: 0
           numberOfAssignees: 0
+          skipDraft: false
 
-          # Skip si el PR es draft
-          skipDraft: false   # <-- equivalente correcto
-            
       - name: Add note when PR becomes Ready for Review
         if: github.event.action == 'ready_for_review'
         uses: peter-evans/create-or-update-comment@v3
@@ -39,4 +32,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            🚀 El pull request ahora está listo para revisión. ¡Gracias!
+            🚀 Pull request is now ready for review!
